@@ -11,7 +11,7 @@ public class SimpleTimestampNameStrategy implements NameGenerationStrategy {
     public String generateFilename(NameSettings settings) {
         return
                 settings.rootDirectory() +
-                        File.pathSeparator +
+                        File.separator +
                         settings.prefix() +
                         Calendar.getInstance().getTimeInMillis() +
                         settings.suffix();
