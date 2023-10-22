@@ -4,7 +4,10 @@ import org.makechtec.software.amatl.logging.Amatl;
 import org.makechtec.software.amatl.logging.StorageException;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 public class InMemoryOutput implements Amatl {
 
@@ -19,7 +22,7 @@ public class InMemoryOutput implements Amatl {
         messages.add(prepareMessage(message));
     }
 
-    private String prepareMessage(final CharSequence message){
+    private String prepareMessage(final CharSequence message) {
 
         var timeFormatter = new SimpleDateFormat("-- hh:mm:ss - dd-MM-yyyy");
 

@@ -15,7 +15,7 @@ public class StreamOutput implements Amatl {
 
     private OutputStream outputStream;
 
-    public void setOutputStream(OutputStream outputStream){
+    public void setOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
 
@@ -29,13 +29,13 @@ public class StreamOutput implements Amatl {
         }
     }
 
-    private byte[] prepareMessage(final CharSequence message){
+    private byte[] prepareMessage(final CharSequence message) {
 
         var timeFormatter = new SimpleDateFormat("-- hh:mm:ss - dd-MM-yyyy");
 
         var formattedMessage = "\n" + message.toString() + timeFormatter.format(Calendar.getInstance().getTime());
 
-        return  formattedMessage.getBytes();
+        return formattedMessage.getBytes();
     }
 
 }

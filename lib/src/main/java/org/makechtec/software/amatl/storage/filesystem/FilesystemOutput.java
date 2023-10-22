@@ -27,12 +27,12 @@ public class FilesystemOutput implements Amatl {
     @Override
     public void saveOn(final CharSequence message) throws StorageException {
 
-        if(hasToChangeOutputFile()){
+        if (hasToChangeOutputFile()) {
             changeFilename();
         }
 
         try {
-            Files.write(Paths.get(filename), prepareMessage(message),StandardOpenOption.APPEND);
+            Files.write(Paths.get(filename), prepareMessage(message), StandardOpenOption.APPEND);
         } catch (IOException e) {
             LOG.severe("FileSystemOutput has had a problem dealing with filesystem making logging");
             throw new StorageException(e);
@@ -40,12 +40,12 @@ public class FilesystemOutput implements Amatl {
 
     }
 
-    private boolean hasToChangeOutputFile(){
+    private boolean hasToChangeOutputFile() {
         var currentCalendar = Calendar.getInstance();
         var temporaryCalendar = this.createComparableCalendar();
         var comparationResult = currentCalendar.compareTo(temporaryCalendar);
 
-        if(comparationResult >= 0){
+        if (comparationResult >= 0) {
             lastCalendarSnapshot = currentCalendar;
             return true;
         }
@@ -53,15 +53,15 @@ public class FilesystemOutput implements Amatl {
         return false;
     }
 
-    private Calendar createComparableCalendar(){
+    private Calendar createComparableCalendar() {
         var temporaryCalendar = Calendar.getInstance();
 
         temporaryCalendar.setTimeInMillis(lastCalendarSnapshot.getTimeInMillis());
 
-        switch (settings.frequencyUnit()){
+        switch (settings.frequencyUnit()) {
             case HOUR -> temporaryCalendar.add(Calendar.HOUR, settings.frequencyQuantity());
             case DAY -> temporaryCalendar.add(Calendar.DAY_OF_MONTH, settings.frequencyQuantity());
-            case WEEK -> temporaryCalendar.add(Calendar.DAY_OF_MONTH, settings.frequencyQuantity()*7);
+            case WEEK -> temporaryCalendar.add(Calendar.DAY_OF_MONTH, settings.frequencyQuantity() * 7);
             case MONTH -> temporaryCalendar.add(Calendar.MONTH, settings.frequencyQuantity());
             case YEAR -> temporaryCalendar.add(Calendar.YEAR, settings.frequencyQuantity());
         }
@@ -69,17 +69,17 @@ public class FilesystemOutput implements Amatl {
         return temporaryCalendar;
     }
 
-    private void changeFilename(){
+    private void changeFilename() {
         filename = settings.nameGenerationStrategy().generateFilename(settings.nameSettings());
     }
 
-    private byte[] prepareMessage(final CharSequence message){
+    private byte[] prepareMessage(final CharSequence message) {
 
         var timeFormatter = new SimpleDateFormat("-- hh:mm:ss - dd-MM-yyyy");
 
         var formattedMessage = "\n" + message.toString() + timeFormatter.format(Calendar.getInstance().getTime());
 
-        return  formattedMessage.getBytes();
+        return formattedMessage.getBytes();
     }
 
 }

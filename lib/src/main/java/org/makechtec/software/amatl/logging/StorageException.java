@@ -1,6 +1,6 @@
 package org.makechtec.software.amatl.logging;
 
-public class StorageException extends Exception{
+public class StorageException extends Exception {
     private final Exception originalException;
 
     public StorageException(Exception originalException) {

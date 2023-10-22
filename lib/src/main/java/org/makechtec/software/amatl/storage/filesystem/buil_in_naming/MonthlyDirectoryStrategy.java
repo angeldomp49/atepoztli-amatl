@@ -19,12 +19,12 @@ public class MonthlyDirectoryStrategy implements NameGenerationStrategy {
 
         return
                 settings.rootDirectory() +
-                 File.pathSeparator +
-                 monthString +
-                 File.pathSeparator +
-                 settings.prefix() +
-                 dayString +
-                 settings.suffix();
+                        File.pathSeparator +
+                        monthString +
+                        File.pathSeparator +
+                        settings.prefix() +
+                        dayString +
+                        settings.suffix();
 
     }
 }
