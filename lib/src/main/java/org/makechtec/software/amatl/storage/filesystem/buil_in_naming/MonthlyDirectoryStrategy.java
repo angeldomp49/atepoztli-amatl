@@ -14,14 +14,14 @@ public class MonthlyDirectoryStrategy implements NameGenerationStrategy {
         var monthFormatter = new SimpleDateFormat("MM-yyyy");
         var monthString = monthFormatter.format(Calendar.getInstance().getTime());
 
-        var dayFormatter = new SimpleDateFormat("-dd__hh-mm-ss");
+        var dayFormatter = new SimpleDateFormat("-dd");
         var dayString = dayFormatter.format(Calendar.getInstance().getTime());
 
         return
                 settings.rootDirectory() +
-                        File.pathSeparator +
+                        File.separator +
                         monthString +
-                        File.pathSeparator +
+                        File.separator +
                         settings.prefix() +
                         dayString +
                         settings.suffix();

@@ -33,14 +33,15 @@ public class FilesystemOutput implements Amatl {
         }
 
         var filePath = Paths.get(filename);
-        var rootDirPath = Paths.get(settings.nameSettings().rootDirectory());
+        var lastParentDirectoryPath = filePath.getParent();
 
         try {
 
             LOG.info("creating log file with next filename: " + filename);
 
-            if(!Files.exists(rootDirPath)){
-                Files.createDirectories(rootDirPath);
+
+            if(Files.notExists(lastParentDirectoryPath)){
+                Files.createDirectories(lastParentDirectoryPath);
             }
 
             if(Files.notExists(filePath)){
