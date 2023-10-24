@@ -1,5 +1,6 @@
 package org.makechtec.software.amatl.logging;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class Cuicatl {
@@ -64,6 +65,10 @@ public class Cuicatl {
 
     public Exception getOriginalException() {
         return originalException;
+    }
+
+    public boolean hasException(){
+        return Objects.nonNull(originalException);
     }
 
 }

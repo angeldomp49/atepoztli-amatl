@@ -71,3 +71,15 @@ For gradle kotlin
     ));
 
     log.info("hello streaming with {}", "angel");
+
+
+## Debug ##
+
+    ...
+    log.info("hello streaming with {}", "angel");
+
+    if(log.hasException()){
+        var originalException = log.getOriginalException();
+
+        e.printStackTrace();
+    }
