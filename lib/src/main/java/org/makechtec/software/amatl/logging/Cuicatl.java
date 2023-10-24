@@ -64,6 +64,8 @@ public class Cuicatl {
     }
 
     public Exception getOriginalException() {
+        var originalException = this.originalException;
+        this.originalException = null;
         return originalException;
     }
 

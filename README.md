@@ -10,16 +10,16 @@ For maven
     <dependency>
         <groupId>org.makechtec.software</groupId>
         <artifactId>amatl</artifactId>
-        <version>1.0.12</version>
+        <version>1.0.13</version>
     </dependency>
 
 For gradle groovy
 
-    implementation 'org.makechtec.software:amatl:1.0.12'
+    implementation 'org.makechtec.software:amatl:1.0.13'
 
 For gradle kotlin
 
-    implementation("org.makechtec.software:amatl:1.0.12")
+    implementation("org.makechtec.software:amatl:1.0.13")
 
 ## Filesystem logging ##
 
