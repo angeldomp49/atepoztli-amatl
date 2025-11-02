@@ -20,22 +20,15 @@ public class StreamOutput implements Amatl {
     }
 
     @Override
-    public void saveOn(CharSequence message) throws StorageException {
+    public void saveMessage(CharSequence message, CharSequence metadata) throws StorageException {
         try {
-            outputStream.write(prepareMessage(message));
+            
+            var formattedMessage = message.toString() + "--" + metadata.toString();
+            outputStream.write(formattedMessage.getBytes());
         } catch (IOException e) {
             LOG.severe("Application couldn't put logs in provided stream");
             throw new StorageException(e);
         }
-    }
-
-    private byte[] prepareMessage(final CharSequence message) {
-
-        var timeFormatter = new SimpleDateFormat(" -- hh:mm:ss - dd-MM-yyyy");
-
-        var formattedMessage = "\n" + message.toString() + timeFormatter.format(Calendar.getInstance().getTime());
-
-        return formattedMessage.getBytes();
     }
 
 }

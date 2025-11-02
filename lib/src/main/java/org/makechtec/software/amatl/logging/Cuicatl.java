@@ -20,7 +20,7 @@ public class Cuicatl {
 
     public void info(CharSequence message, Object... values) {
         try {
-            settings.info().saveOn(formatter.cleanMessage(message, values));
+            settings.info().saveMessage(formatter.cleanMessage(message, values));
         } catch (StorageException e) {
             LOG.warning("There was an error saving log message! \nTo get original exception please use getOriginalException()");
             originalException = e;
@@ -29,7 +29,7 @@ public class Cuicatl {
 
     public void debug(CharSequence message, Object... values) {
         try {
-            settings.debug().saveOn(formatter.cleanMessage(message, values));
+            settings.debug().saveMessage(formatter.cleanMessage(message, values));
         } catch (StorageException e) {
             LOG.warning("There was an error saving log message! \nTo get original exception please use getOriginalException()");
             originalException = e;
@@ -38,7 +38,7 @@ public class Cuicatl {
 
     public void warning(CharSequence message, Object... values) {
         try {
-            settings.warning().saveOn(formatter.cleanMessage(message, values));
+            settings.warning().saveMessage(formatter.cleanMessage(message, values));
         } catch (StorageException e) {
             LOG.warning("There was an error saving log message! \nTo get original exception please use getOriginalException()");
             originalException = e;
@@ -47,7 +47,7 @@ public class Cuicatl {
 
     public void severe(CharSequence message, Object... values) {
         try {
-            settings.severe().saveOn(formatter.cleanMessage(message, values));
+            settings.severe().saveMessage(formatter.cleanMessage(message, values));
         } catch (StorageException e) {
             LOG.warning("There was an error saving log message! \nTo get original exception please use getOriginalException()");
             originalException = e;
@@ -56,7 +56,7 @@ public class Cuicatl {
 
     public void error(CharSequence message, Object... values) {
         try {
-            settings.error().saveOn(formatter.cleanMessage(message, values));
+            settings.error().saveMessage(formatter.cleanMessage(message, values));
         } catch (StorageException e) {
             LOG.warning("There was an error saving log message! \nTo get original exception please use getOriginalException()");
             originalException = e;

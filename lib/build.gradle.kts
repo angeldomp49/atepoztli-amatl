@@ -28,7 +28,6 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation("com.google.guava:guava:31.1-jre")
-    implementation("org.makechtec.software:sql_support:2.1.0-SNAPSHOT")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

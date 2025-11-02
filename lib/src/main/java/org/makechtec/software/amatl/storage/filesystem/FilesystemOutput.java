@@ -26,7 +26,7 @@ public class FilesystemOutput implements Amatl {
     }
 
     @Override
-    public void saveOn(final CharSequence message) throws StorageException {
+    public void saveMessage(final CharSequence message, CharSequence metadata) throws StorageException {
 
         if (hasToChangeOutputFile()) {
             changeFilename();
@@ -47,8 +47,10 @@ public class FilesystemOutput implements Amatl {
             if(Files.notExists(filePath)){
                 Files.createFile(filePath);
             }
+            
+            var formattedMessage = message.toString() + " -- " + metadata.toString();
 
-            Files.write(filePath, prepareMessage(message), StandardOpenOption.APPEND);
+            Files.write(filePath, formattedMessage.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             LOG.severe("FileSystemOutput has had a problem dealing with filesystem making logging");
             throw new StorageException(e);
@@ -87,15 +89,6 @@ public class FilesystemOutput implements Amatl {
 
     private void changeFilename() {
         filename = settings.nameGenerationStrategy().generateFilename(settings.nameSettings());
-    }
-
-    private byte[] prepareMessage(final CharSequence message) {
-
-        var timeFormatter = new SimpleDateFormat(" -- hh:mm:ss - dd-MM-yyyy");
-
-        var formattedMessage = "\n" + message.toString() + timeFormatter.format(Calendar.getInstance().getTime());
-
-        return formattedMessage.getBytes();
     }
 
 }
