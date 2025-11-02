@@ -1,4 +1,4 @@
-package org.makechtec.software.amatl.storage.filesystem;
+package org.makechtec.software.amatl.outputs.filesystem;
 
 import org.makechtec.software.amatl.logging.Amatl;
 import org.makechtec.software.amatl.logging.StorageException;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Logger;
 

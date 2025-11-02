@@ -1,12 +1,10 @@
-package org.makechtec.software.amatl.storage.streaming;
+package org.makechtec.software.amatl.outputs.streaming;
 
 import org.makechtec.software.amatl.logging.Amatl;
 import org.makechtec.software.amatl.logging.StorageException;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.logging.Logger;
 
 public class StreamOutput implements Amatl {

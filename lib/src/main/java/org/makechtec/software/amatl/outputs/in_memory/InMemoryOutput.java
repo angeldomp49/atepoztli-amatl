@@ -1,11 +1,9 @@
-package org.makechtec.software.amatl.storage.in_memory;
+package org.makechtec.software.amatl.outputs.in_memory;
 
 import org.makechtec.software.amatl.logging.Amatl;
 import org.makechtec.software.amatl.logging.StorageException;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.makechtec.software.amatl.storage.filesystem;
+package org.makechtec.software.amatl.outputs.filesystem;
 
 public enum FrequencyUnit {
 

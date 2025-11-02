@@ -1,4 +1,4 @@
-package org.makechtec.software.amatl.storage.filesystem.naming;
+package org.makechtec.software.amatl.outputs.filesystem.naming;
 
 public record NameSettings(
         String rootDirectory,
