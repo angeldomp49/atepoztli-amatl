@@ -1,0 +1,30 @@
+package org.makechtec.software.amatl.built_in_writers.filesystem.buil_in_naming;
+
+import org.makechtec.software.amatl.built_in_writers.filesystem.naming.NameGenerationStrategy;
+import org.makechtec.software.amatl.built_in_writers.filesystem.naming.NameSettings;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class MonthlyDirectoryStrategy implements NameGenerationStrategy {
+    @Override
+    public String generateFilename(NameSettings settings) {
+
+        var monthFormatter = new SimpleDateFormat("MM-yyyy");
+        var monthString = monthFormatter.format(Calendar.getInstance().getTime());
+
+        var dayFormatter = new SimpleDateFormat("-dd");
+        var dayString = dayFormatter.format(Calendar.getInstance().getTime());
+
+        return
+                settings.rootDirectory() +
+                        File.separator +
+                        monthString +
+                        File.separator +
+                        settings.prefix() +
+                        dayString +
+                        settings.suffix();
+
+    }
+}
