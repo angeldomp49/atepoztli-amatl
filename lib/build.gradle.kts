@@ -51,7 +51,7 @@ publishing {
 
             groupId = "org.makechtec.software"
             artifactId = "amatl"
-            version = "1.0.13"
+            version = "1.1.0"
         }
     }
 }

@@ -11,7 +11,7 @@ public class MessageFormatter {
         var buffer = template;
 
         for (var value : values) {
-            buffer = buffer.replace("{}", value.toString());
+            buffer = buffer.replaceFirst("\\{\\}", value.toString());
         }
 
 

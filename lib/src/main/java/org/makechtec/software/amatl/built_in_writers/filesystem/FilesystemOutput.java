@@ -18,12 +18,13 @@ public class FilesystemOutput {
     public FilesystemOutput(FileGenerationSettings settings) {
         this.settings = settings;
         this.lastCalendarSnapshot = Calendar.getInstance();
+        updateFilename();
     }
 
     public void saveMessage(final String message) {
 
         if (hasToChangeOutputFile()) {
-            changeFilename();
+            updateFilename();
         }
 
         var filePath = Paths.get(filename);
@@ -79,7 +80,7 @@ public class FilesystemOutput {
         return temporaryCalendar;
     }
 
-    private void changeFilename() {
+    private void updateFilename() {
         filename = settings.nameGenerationStrategy().generateFilename(settings.nameSettings());
     }
 
