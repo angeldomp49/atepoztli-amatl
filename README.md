@@ -1,71 +1,116 @@
-# Requirements #
+# Amatl - Java Logging Library
 
-- java 17 or greater
-- For database logging MySQL or Postgres database engine connection
+A lightweight and flexible logging library for Java applications with support for multiple logging strategies.
 
-# USAGE #
+## Requirements
 
-For maven
+- Java 17 or greater
 
-    <dependency>
-        <groupId>org.makechtec.software</groupId>
-        <artifactId>amatl</artifactId>
-        <version>1.0.13</version>
-    </dependency>
+## Quick Start
 
-For gradle groovy
+### Maven (XML)
 
-    implementation 'org.makechtec.software:amatl:1.0.13'
+```xml
+<dependency>
+    <groupId>org.makechtec.software</groupId>
+    <artifactId>amatl</artifactId>
+    <version>1.0.13</version>
+</dependency>
+```
 
-For gradle kotlin
+### Gradle (Groovy)
 
-    implementation("org.makechtec.software:amatl:1.0.13")
+```groovy
+implementation 'org.makechtec.software:amatl:1.0.13'
+```
 
-## Filesystem logging ##
+### Gradle (Kotlin DSL)
 
-    var mainConfig = new FilesystemOutput(new FileGenerationSettings(
-            1000,
-            FrequencyUnit.YEAR,
-            new SimpleTimestampNameStrategy(),
-            new NameSettings(
-                    "/Users/estefaniarv/Desktop/angel/development/static-for-tests/logging",
-                    "log-",
-                    ".txt"
-            )
-    ));
+```kotlin
+implementation("org.makechtec.software:amatl:1.0.13")
+```
 
-    var log = new Cuicatl(new LevelOutputSettings(
-            mainConfig,
-            mainConfig,
-            mainConfig,
-            mainConfig,
-            mainConfig
-    ));
+## Documentation
 
-    log.info("hello filesystem {}", "filesystem-admin");
+For complete documentation with detailed examples and usage guides, please refer to:
 
-## In memory logging ##
+- **[English Documentation](docs/README.md)** - Full documentation in English
+- **[Documentación en Español](docs/README_ES.md)** - Documentación completa en español
+- **[Documentation Française](docs/README_FR.md)** - Documentation complète en français
 
-    var messages = new ArrayList<String>();
+## Features
 
-    var log = new Cuicatl(new LevelOutputSettings(
-            new InMemoryOutput(messages),
-            new InMemoryOutput(messages),
-            new InMemoryOutput(messages),
-            new InMemoryOutput(messages),
+- **Multiple Log Writers**: In-memory, file system, and stream-based logging
+- **Five Log Levels**: DEBUG, INFO, WARNING, SEVERE, ERROR
+- **Message Formatting**: Parameterized messages with placeholders
+- **Stack Trace Logging**: Built-in exception stack trace logging
+- **Flexible File Organization**: Pre-built strategies for organizing log files
+- **Thread-Safe**: Safe for concurrent use
+
+## Simple Usage Example
+### File System Logging
+
+```java
+MonthlyDirectoryStrategy monthlyStrategy = new MonthlyDirectoryStrategy();
+
+NameSettings nameSettings = new NameSettings(
+    "/var/log/myapp",
+    "application",
+    ".log"
+);
+
+FileGenerationSettings fileSettings = new FileGenerationSettings(
+    1,
+    FrequencyUnit.DAY,
+    monthlyStrategy,
+    nameSettings
+);
+
+FilesystemOutput output = new FilesystemOutput(fileSettings);
+FileSystemLogWriter logger = new FileSystemLogWriter(
+    new MessageFormatter(),
+    new MetadataGenericBuilder(new TimeInformationFormatter()),
+    output
+);
+
+logger.info("Application initialized");
+logger.debug("Processing request {}", "REQ-001");
+```
+
+### Stream Logging
+
+```java
+StreamLogWriter logger = new StreamLogWriter(
+    System.out,
+    new MessageFormatter(),
+    new MetadataGenericBuilder(new TimeInformationFormatter())
+);
+
+logger.info("Server started on port {}", 8080);
+logger.debug("Received request from {}", "192.168.1.100");
+```
+
+## Testing
+logger.debug("User {} logged in", "JohnDoe");
+The library includes comprehensive test coverage:
+
+- **77 tests** with 100% success rate
+- Unit tests using JUnit 5 and Mockito
+- Integration tests demonstrating real-world usage scenarios
             new InMemoryOutput(messages)
-    ));
+Run tests with:
+```bash
+./gradlew test
+```
 
-    log.info("hello {}", "angel");
+## License
 
-    messages.forEach(System.out::println);
-
+Distributed under the terms specified by MakechTec Software.
 ## Streaming logging ##
+## Support
+            new StreamOutput(System.out),
+For issues, questions, or contributions, please contact MakechTec Software.
 
-    var log = new Cuicatl(new LevelOutputSettings(
-            new StreamOutput(System.out),
-            new StreamOutput(System.out),
-            new StreamOutput(System.out),
             new StreamOutput(System.out),
             new StreamOutput(System.out)
     ));
