@@ -1,4 +1,4 @@
-package org.makechtec.software.amatl.logging;
+package org.makechtec.software.amatl.format;
 
 import java.util.regex.Pattern;
 
@@ -6,9 +6,9 @@ public class MessageFormatter {
 
     private static final String PLACEHOLDER_SIGN = "{}";
 
-    public String cleanMessage(CharSequence template, Object... values) {
+    public String formatMessageFromTemplate(String template, Object... values) {
 
-        var buffer = template.toString();
+        var buffer = template;
 
         for (var value : values) {
             buffer = buffer.replace("{}", value.toString());
@@ -18,7 +18,7 @@ public class MessageFormatter {
         return buffer;
     }
 
-    private int findPlaceholdersCount(CharSequence template) {
+    private int countPlaceholders(CharSequence template) {
         var pattern = Pattern.compile("\\{\\}");
         var matcher = pattern.matcher(template);
 

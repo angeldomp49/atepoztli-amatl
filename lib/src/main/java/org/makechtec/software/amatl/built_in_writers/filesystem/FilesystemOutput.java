@@ -1,7 +1,4 @@
-package org.makechtec.software.amatl.outputs.filesystem;
-
-import org.makechtec.software.amatl.logging.Amatl;
-import org.makechtec.software.amatl.logging.StorageException;
+package org.makechtec.software.amatl.built_in_writers.filesystem;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +7,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
-public class FilesystemOutput implements Amatl {
+public class FilesystemOutput {
 
     private static final Logger LOG = Logger.getLogger(FilesystemOutput.class.getName());
 
@@ -21,11 +18,9 @@ public class FilesystemOutput implements Amatl {
     public FilesystemOutput(FileGenerationSettings settings) {
         this.settings = settings;
         this.lastCalendarSnapshot = Calendar.getInstance();
-        changeFilename();
     }
 
-    @Override
-    public void saveMessage(final CharSequence message, CharSequence metadata) throws StorageException {
+    public void saveMessage(final String message) {
 
         if (hasToChangeOutputFile()) {
             changeFilename();
@@ -47,12 +42,10 @@ public class FilesystemOutput implements Amatl {
                 Files.createFile(filePath);
             }
             
-            var formattedMessage = message.toString() + " -- " + metadata.toString();
 
-            Files.write(filePath, formattedMessage.getBytes(), StandardOpenOption.APPEND);
+            Files.write(filePath, message.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
-            LOG.severe("FileSystemOutput has had a problem dealing with filesystem making logging");
-            throw new StorageException(e);
+            LOG.warning("FileSystemOutput has had a problem resolving the filesystem, so the logs are not being saved");
         }
 
     }
@@ -60,9 +53,9 @@ public class FilesystemOutput implements Amatl {
     private boolean hasToChangeOutputFile() {
         var currentCalendar = Calendar.getInstance();
         var temporaryCalendar = this.createComparableCalendar();
-        var comparationResult = currentCalendar.compareTo(temporaryCalendar);
+        var comparisonResult = currentCalendar.compareTo(temporaryCalendar);
 
-        if (comparationResult >= 0) {
+        if (comparisonResult >= 0) {
             lastCalendarSnapshot = currentCalendar;
             return true;
         }
