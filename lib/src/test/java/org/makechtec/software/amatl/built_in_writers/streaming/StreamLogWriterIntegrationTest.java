@@ -142,7 +142,7 @@ class StreamLogWriterIntegrationTest {
     }
 
     @Test
-    void shouldContinueLoggingAfterIOException() throws IOException {
+    void shouldContinueLoggingAfterIOException() {
         OutputStream failingStream = new OutputStream() {
             private int callCount = 0;
 

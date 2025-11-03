@@ -16,7 +16,7 @@ public class InMemoryLogWriter implements LogWriter {
     private final MessageFormatter formatter;
     private final MetadataGenericBuilder metadataBuilder;
 
-    public InMemoryLogWriter(MessageFormatter formatter, TimeInformationFormatter timeInformationFormatter, MetadataGenericBuilder metadataBuilder) {
+    public InMemoryLogWriter(MessageFormatter formatter, MetadataGenericBuilder metadataBuilder) {
         this.formatter = formatter;
         this.metadataBuilder = metadataBuilder;
         this.messages = new ArrayList<>();
@@ -52,9 +52,7 @@ public class InMemoryLogWriter implements LogWriter {
     @Override
     public void traceStack(Throwable throwable) {
         Arrays.stream(throwable.getStackTrace())
-                .forEachOrdered(stackTraceElement -> {
-                    registerLogRecord(stackTraceElement.toString(), "[STACK_TRACE]");
-                });
+                .forEachOrdered(stackTraceElement -> registerLogRecord(stackTraceElement.toString(), "[STACK_TRACE]"));
     }
 
     private void registerLogRecord(String message, String level, Object... values) {
