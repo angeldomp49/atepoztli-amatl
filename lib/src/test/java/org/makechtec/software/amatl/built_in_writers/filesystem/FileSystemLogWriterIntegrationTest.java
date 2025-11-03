@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.makechtec.software.amatl.built_in_writers.commons.MetadataGenericBuilder;
 import org.makechtec.software.amatl.built_in_writers.commons.TimeInformationFormatter;
+import org.makechtec.software.amatl.built_in_writers.filesystem.buil_in_naming.MonthlyDirectoryStrategy;
 import org.makechtec.software.amatl.built_in_writers.filesystem.naming.NameGenerationStrategy;
 import org.makechtec.software.amatl.built_in_writers.filesystem.naming.NameSettings;
 import org.makechtec.software.amatl.format.MessageFormatter;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -261,5 +264,56 @@ class FileSystemLogWriterIntegrationTest {
         assertTrue(Files.exists(deepLogPath));
         assertTrue(Files.isDirectory(deepLogPath.getParent()));
     }
-}
 
+    @Test
+    void shouldUseMonthlyDirectoryStrategyForOrganizingLogs() throws IOException {
+        MonthlyDirectoryStrategy monthlyStrategy = new MonthlyDirectoryStrategy();
+        
+        NameSettings monthlySettings = new NameSettings(
+            tempDir.toString(),
+            "application",
+            ".log"
+        );
+        
+        FileGenerationSettings monthlyFileSettings = new FileGenerationSettings(
+            1,
+            FrequencyUnit.DAY,
+            monthlyStrategy,
+            monthlySettings
+        );
+        
+        FilesystemOutput monthlyFilesystemOutput = new FilesystemOutput(monthlyFileSettings);
+        FileSystemLogWriter monthlyLogWriter = new FileSystemLogWriter(
+            new MessageFormatter(),
+            new MetadataGenericBuilder(new TimeInformationFormatter()),
+            monthlyFilesystemOutput
+        );
+        
+        monthlyLogWriter.info("Log entry for monthly organized directory");
+        monthlyLogWriter.debug("Processing request {}", "REQ-001");
+        monthlyLogWriter.warning("System resource usage at {}%", 85);
+        
+        SimpleDateFormat monthFormatter = new SimpleDateFormat("MM-yyyy");
+        String expectedMonth = monthFormatter.format(Calendar.getInstance().getTime());
+        
+        SimpleDateFormat dayFormatter = new SimpleDateFormat("-dd");
+        String expectedDay = dayFormatter.format(Calendar.getInstance().getTime());
+        
+        Path expectedMonthDirectory = tempDir.resolve(expectedMonth);
+        assertTrue(Files.exists(expectedMonthDirectory));
+        assertTrue(Files.isDirectory(expectedMonthDirectory));
+        
+        Path expectedLogFile = expectedMonthDirectory.resolve("application" + expectedDay + ".log");
+        assertTrue(Files.exists(expectedLogFile));
+        
+        List<String> lines = Files.readAllLines(expectedLogFile);
+        String content = String.join("", lines);
+        
+        assertTrue(content.contains("Log entry for monthly organized directory"));
+        assertTrue(content.contains("[INFO]"));
+        assertTrue(content.contains("[DEBUG]"));
+        assertTrue(content.contains("[WARNING]"));
+        assertTrue(content.contains("REQ-001"));
+        assertTrue(content.contains("85"));
+    }
+}
