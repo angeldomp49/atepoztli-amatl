@@ -1,7 +1,6 @@
 package org.makechtec.software.amatl.built_in_writers.in_memory;
 
 import org.makechtec.software.amatl.built_in_writers.commons.MetadataGenericBuilder;
-import org.makechtec.software.amatl.built_in_writers.commons.TimeInformationFormatter;
 import org.makechtec.software.amatl.format.MessageFormatter;
 import org.makechtec.software.amatl.logging.writing.LogWriter;
 

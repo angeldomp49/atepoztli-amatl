@@ -38,7 +38,7 @@ class InMemoryLogWriterTest {
         });
         lenient().when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        logWriter = new InMemoryLogWriter(messageFormatter, timeInformationFormatter, metadataGenericBuilder);
+        logWriter = new InMemoryLogWriter(messageFormatter, metadataGenericBuilder);
     }
 
     @Test

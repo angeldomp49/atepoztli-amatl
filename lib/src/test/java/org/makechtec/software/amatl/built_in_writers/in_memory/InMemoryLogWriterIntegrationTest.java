@@ -18,7 +18,7 @@ class InMemoryLogWriterIntegrationTest {
         TimeInformationFormatter timeInformationFormatter = new TimeInformationFormatter();
         MetadataGenericBuilder metadataGenericBuilder = new MetadataGenericBuilder(timeInformationFormatter);
 
-        logWriter = new InMemoryLogWriter(messageFormatter, timeInformationFormatter, metadataGenericBuilder);
+        logWriter = new InMemoryLogWriter(messageFormatter, metadataGenericBuilder);
     }
 
     @Test
