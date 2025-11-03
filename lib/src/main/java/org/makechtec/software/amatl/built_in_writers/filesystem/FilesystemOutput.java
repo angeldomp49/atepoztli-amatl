@@ -35,14 +35,14 @@ public class FilesystemOutput {
             LOG.info("creating log file with next filename: " + filename);
 
 
-            if(Files.notExists(lastParentDirectoryPath)){
+            if (Files.notExists(lastParentDirectoryPath)) {
                 Files.createDirectories(lastParentDirectoryPath);
             }
 
-            if(Files.notExists(filePath)){
+            if (Files.notExists(filePath)) {
                 Files.createFile(filePath);
             }
-            
+
 
             Files.write(filePath, message.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {

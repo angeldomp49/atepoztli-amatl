@@ -12,15 +12,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StreamLogWriterTest {
@@ -43,7 +39,7 @@ class StreamLogWriterTest {
             return level + " 12:00:00 -- ";
         });
         lenient().when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
-        
+
         logWriter = new StreamLogWriter(outputStream, messageFormatter, metadataGenericBuilder);
     }
 
@@ -162,7 +158,7 @@ class StreamLogWriterTest {
     @Test
     void shouldTraceStackFromThrowable() throws IOException {
         RuntimeException exception = new RuntimeException("Test exception");
-        
+
         when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
 
         logWriter.traceStack(exception);
@@ -173,7 +169,7 @@ class StreamLogWriterTest {
     @Test
     void shouldHandleIOExceptionWhenTracingStack() throws IOException {
         doThrow(new IOException("Stream error")).when(outputStream).write(any(byte[].class));
-        
+
         RuntimeException exception = new RuntimeException("Test exception");
 
         logWriter.traceStack(exception);
@@ -189,7 +185,7 @@ class StreamLogWriterTest {
     @Test
     void shouldReturnFalseWhenStreamIsNull() {
         StreamLogWriter nullStreamWriter = new StreamLogWriter(null, messageFormatter, metadataGenericBuilder);
-        
+
         assertFalse(nullStreamWriter.isStreamOpen());
     }
 
@@ -197,7 +193,7 @@ class StreamLogWriterTest {
     void shouldWriteToActualOutputStream() {
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         StreamLogWriter actualWriter = new StreamLogWriter(byteOutputStream, messageFormatter, metadataGenericBuilder);
-        
+
         String testMessage = "Test message";
         when(messageFormatter.formatMessageFromTemplate(testMessage)).thenReturn(testMessage);
 

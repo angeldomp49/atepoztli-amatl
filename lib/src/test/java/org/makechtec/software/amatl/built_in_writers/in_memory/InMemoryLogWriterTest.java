@@ -37,7 +37,7 @@ class InMemoryLogWriterTest {
             return level + " 12:00:00 -- ";
         });
         lenient().when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
-        
+
         logWriter = new InMemoryLogWriter(messageFormatter, timeInformationFormatter, metadataGenericBuilder);
     }
 
@@ -136,23 +136,23 @@ class InMemoryLogWriterTest {
     @Test
     void shouldTraceStackFromThrowable() {
         RuntimeException exception = new RuntimeException("Test exception");
-        
+
         when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
 
         logWriter.traceStack(exception);
 
         var messages = logWriter.getMessages();
         assertFalse(messages.isEmpty());
-        
+
         messages.forEach(message -> assertEquals("[STACK_TRACE] 12:00:00 -- ", message.metadata()));
     }
 
     @Test
     void shouldReturnUnmodifiableList() {
         logWriter.info("Test message");
-        
+
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
     }
 }

@@ -17,7 +17,7 @@ class InMemoryLogWriterIntegrationTest {
         MessageFormatter messageFormatter = new MessageFormatter();
         TimeInformationFormatter timeInformationFormatter = new TimeInformationFormatter();
         MetadataGenericBuilder metadataGenericBuilder = new MetadataGenericBuilder(timeInformationFormatter);
-        
+
         logWriter = new InMemoryLogWriter(messageFormatter, timeInformationFormatter, metadataGenericBuilder);
     }
 
@@ -26,7 +26,7 @@ class InMemoryLogWriterIntegrationTest {
         logWriter.info("Application started successfully");
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
         assertTrue(messages.get(0).message().contains("Application started successfully"));
         assertTrue(messages.get(0).metadata().contains("[INFO]"));
@@ -35,11 +35,11 @@ class InMemoryLogWriterIntegrationTest {
     @Test
     void shouldLogMessageWithSingleArgument() {
         String username = "JohnDoe";
-        
+
         logWriter.info("User {} logged in", username);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
         assertTrue(messages.get(0).message().contains("User JohnDoe logged in"));
     }
@@ -49,11 +49,11 @@ class InMemoryLogWriterIntegrationTest {
         String username = "JohnDoe";
         String action = "updated";
         String resource = "profile";
-        
+
         logWriter.info("User {} {} {}", username, action, resource);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
         assertTrue(messages.get(0).message().contains("JohnDoe"));
         assertTrue(messages.get(0).message().contains("updated"));
@@ -69,7 +69,7 @@ class InMemoryLogWriterIntegrationTest {
         logWriter.error("Error occurred");
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(5, messages.size());
         assertTrue(messages.get(0).metadata().contains("[DEBUG]"));
         assertTrue(messages.get(1).metadata().contains("[INFO]"));
@@ -89,7 +89,7 @@ class InMemoryLogWriterIntegrationTest {
         logWriter.info("Request completed successfully");
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(7, messages.size());
         assertTrue(messages.get(4).message().contains("123"));
     }
@@ -97,19 +97,19 @@ class InMemoryLogWriterIntegrationTest {
     @Test
     void shouldLogExceptionStackTrace() {
         RuntimeException exception = new RuntimeException("Database connection failed");
-        
+
         logWriter.error("An error occurred while processing request");
         logWriter.traceStack(exception);
 
         var messages = logWriter.getMessages();
-        
+
         assertTrue(messages.size() > 1);
         assertTrue(messages.get(0).message().contains("An error occurred"));
-        
+
         long stackTraceMessages = messages.stream()
                 .filter(msg -> msg.metadata().contains("[STACK_TRACE]"))
                 .count();
-        
+
         assertTrue(stackTraceMessages > 0);
     }
 
@@ -118,11 +118,11 @@ class InMemoryLogWriterIntegrationTest {
         int requestId = 42;
         double processingTime = 125.5;
         boolean success = true;
-        
+
         logWriter.info("Request {} completed in {}ms with status: {}", requestId, processingTime, success);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
         assertTrue(messages.get(0).message().contains("42"));
         assertTrue(messages.get(0).message().contains("125.5"));
@@ -136,7 +136,7 @@ class InMemoryLogWriterIntegrationTest {
         }
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(10, messages.size());
         for (int i = 0; i < 10; i++) {
             assertTrue(messages.get(i).message().contains(String.valueOf(i + 1)));
@@ -147,13 +147,13 @@ class InMemoryLogWriterIntegrationTest {
     void shouldLogErrorScenarioWithContext() {
         String userId = "user123";
         String operation = "updateProfile";
-        
+
         logWriter.info("User {} attempting operation: {}", userId, operation);
         logWriter.warning("Validation failed for user {}", userId);
         logWriter.error("Operation {} failed for user {}", operation, userId);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(3, messages.size());
         assertTrue(messages.get(2).message().contains("updateProfile"));
         assertTrue(messages.get(2).message().contains("user123"));
@@ -162,9 +162,9 @@ class InMemoryLogWriterIntegrationTest {
     @Test
     void shouldReturnUnmodifiableMessagesList() {
         logWriter.info("Test message");
-        
+
         var messages = logWriter.getMessages();
-        
+
         assertThrows(UnsupportedOperationException.class, messages::clear);
     }
 
@@ -172,7 +172,7 @@ class InMemoryLogWriterIntegrationTest {
     void shouldLogCompleteUserSession() {
         String sessionId = "sess-abc123";
         String username = "john.doe";
-        
+
         logWriter.info("Session {} created for user {}", sessionId, username);
         logWriter.debug("User {} authenticated successfully", username);
         logWriter.info("User {} accessed resource: {}", username, "/api/data");
@@ -180,7 +180,7 @@ class InMemoryLogWriterIntegrationTest {
         logWriter.info("Session {} ended for user {}", sessionId, username);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(5, messages.size());
         assertTrue(messages.get(0).message().contains("sess-abc123"));
         assertTrue(messages.get(2).message().contains("/api/data"));
@@ -192,13 +192,13 @@ class InMemoryLogWriterIntegrationTest {
         String tableName = "users";
         int recordsProcessed = 150;
         long queryTimeMs = 234L;
-        
+
         logWriter.debug("Executing query on table {}", tableName);
         logWriter.debug("Query completed in {}ms", queryTimeMs);
         logWriter.info("Processed {} records from table {}", recordsProcessed, tableName);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(3, messages.size());
         assertTrue(messages.get(0).message().contains("users"));
         assertTrue(messages.get(1).message().contains("234"));
@@ -211,13 +211,13 @@ class InMemoryLogWriterIntegrationTest {
         logWriter.debug("Initializing components");
         logWriter.info("Server listening on port {}", 8080);
         logWriter.info("Application ready");
-        
+
         logWriter.info("Shutting down gracefully");
         logWriter.debug("Closing database connections");
         logWriter.info("Application stopped");
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(7, messages.size());
         assertTrue(messages.get(0).message().contains("starting"));
         assertTrue(messages.get(2).message().contains("8080"));
@@ -229,13 +229,13 @@ class InMemoryLogWriterIntegrationTest {
         String serviceName = "PaymentService";
         String status = "healthy";
         int responseTime = 45;
-        
+
         logWriter.info("Health check for service: {}", serviceName);
         logWriter.debug("Service {} responded in {}ms", serviceName, responseTime);
         logWriter.info("Service {} status: {}", serviceName, status);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(3, messages.size());
         assertTrue(messages.get(0).message().contains("PaymentService"));
         assertTrue(messages.get(1).message().contains("45"));
@@ -245,9 +245,9 @@ class InMemoryLogWriterIntegrationTest {
     @Test
     void shouldHandleEmptyMessages() {
         logWriter.info("");
-        
+
         var messages = logWriter.getMessages();
-        
+
         assertEquals(1, messages.size());
         assertTrue(messages.get(0).metadata().contains("[INFO]"));
     }
@@ -257,12 +257,12 @@ class InMemoryLogWriterIntegrationTest {
         String ipAddress = "192.168.1.100";
         String username = "admin";
         String action = "login_attempt";
-        
+
         logWriter.warning("Security event: {} from IP {}", action, ipAddress);
         logWriter.info("User {} authenticated from {}", username, ipAddress);
 
         var messages = logWriter.getMessages();
-        
+
         assertEquals(2, messages.size());
         assertTrue(messages.get(0).metadata().contains("[WARNING]"));
         assertTrue(messages.get(0).message().contains("192.168.1.100"));

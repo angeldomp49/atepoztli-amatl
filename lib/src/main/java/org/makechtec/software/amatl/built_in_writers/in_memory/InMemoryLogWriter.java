@@ -5,7 +5,6 @@ import org.makechtec.software.amatl.built_in_writers.commons.TimeInformationForm
 import org.makechtec.software.amatl.format.MessageFormatter;
 import org.makechtec.software.amatl.logging.writing.LogWriter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +15,7 @@ public class InMemoryLogWriter implements LogWriter {
     private final List<InMemoryMessageRecord> messages;
     private final MessageFormatter formatter;
     private final MetadataGenericBuilder metadataBuilder;
-    
+
     public InMemoryLogWriter(MessageFormatter formatter, TimeInformationFormatter timeInformationFormatter, MetadataGenericBuilder metadataBuilder) {
         this.formatter = formatter;
         this.metadataBuilder = metadataBuilder;
@@ -25,7 +24,7 @@ public class InMemoryLogWriter implements LogWriter {
 
     @Override
     public void info(String message, Object... values) {
-        
+
         registerLogRecord(message, "[INFO]", values);
     }
 
@@ -57,8 +56,8 @@ public class InMemoryLogWriter implements LogWriter {
                     registerLogRecord(stackTraceElement.toString(), "[STACK_TRACE]");
                 });
     }
-    
-    private void registerLogRecord(String message, String level, Object... values){
+
+    private void registerLogRecord(String message, String level, Object... values) {
         var metadata = metadataBuilder.build(level);
 
         var formattedMessage = formatter.formatMessageFromTemplate(message, values);
@@ -73,6 +72,7 @@ public class InMemoryLogWriter implements LogWriter {
     public record InMemoryMessageRecord(
             String message,
             String metadata
-    ){}
-    
+    ) {
+    }
+
 }

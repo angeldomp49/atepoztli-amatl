@@ -12,10 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FileSystemLogWriterTest {
@@ -38,7 +35,7 @@ class FileSystemLogWriterTest {
             return level + " 12:00:00 -- ";
         });
         lenient().when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
-        
+
         logWriter = new FileSystemLogWriter(messageFormatter, metadataGenericBuilder, filesystemOutput);
     }
 
@@ -51,7 +48,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[INFO] 12:00:00 --  " + testMessage, savedMessage);
     }
@@ -66,7 +63,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[INFO] 12:00:00 --  " + formattedMessage, savedMessage);
     }
@@ -80,7 +77,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[DEBUG] 12:00:00 --  " + testMessage, savedMessage);
     }
@@ -94,7 +91,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[WARNING] 12:00:00 --  " + testMessage, savedMessage);
     }
@@ -108,7 +105,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[SEVERE] 12:00:00 --  " + testMessage, savedMessage);
     }
@@ -122,7 +119,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertEquals("[ERROR] 12:00:00 --  " + testMessage, savedMessage);
     }
@@ -143,7 +140,7 @@ class FileSystemLogWriterTest {
     @Test
     void shouldTraceStackFromThrowable() {
         RuntimeException exception = new RuntimeException("Test exception");
-        
+
         when(messageFormatter.formatMessageFromTemplate(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
 
         logWriter.traceStack(exception);
@@ -155,14 +152,14 @@ class FileSystemLogWriterTest {
     void shouldFormatStackTraceElementsCorrectly() {
         RuntimeException exception = new RuntimeException("Test exception");
         String stackElementString = exception.getStackTrace()[0].toString();
-        
+
         when(messageFormatter.formatMessageFromTemplate(stackElementString)).thenReturn(stackElementString);
 
         logWriter.traceStack(exception);
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput, times(exception.getStackTrace().length)).saveMessage(messageCaptor.capture());
-        
+
         messageCaptor.getAllValues().forEach(message -> {
             assertTrue(message.contains("[STACK TRACE"));
             assertTrue(message.contains("12:00:00"));
@@ -180,7 +177,7 @@ class FileSystemLogWriterTest {
 
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(filesystemOutput).saveMessage(messageCaptor.capture());
-        
+
         String savedMessage = messageCaptor.getValue();
         assertTrue(savedMessage.contains(formattedMessage));
     }

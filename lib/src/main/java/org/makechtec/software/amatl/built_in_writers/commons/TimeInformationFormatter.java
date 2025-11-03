@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 
 public class TimeInformationFormatter {
 
-    public String getCurrentFormattedTime(){
+    public String getCurrentFormattedTime() {
         var simpleTimeFormatter = new SimpleDateFormat("HH:mm:ss");
         return simpleTimeFormatter.format(System.currentTimeMillis());
     }
-    
+
 }

@@ -24,7 +24,7 @@ class StreamLogWriterIntegrationTest {
         MessageFormatter messageFormatter = new MessageFormatter();
         TimeInformationFormatter timeInformationFormatter = new TimeInformationFormatter();
         MetadataGenericBuilder metadataGenericBuilder = new MetadataGenericBuilder(timeInformationFormatter);
-        
+
         logWriter = new StreamLogWriter(outputStream, messageFormatter, metadataGenericBuilder);
     }
 
@@ -33,7 +33,7 @@ class StreamLogWriterIntegrationTest {
         logWriter.info("Application started");
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("[INFO]"));
         assertTrue(output.contains("Application started"));
     }
@@ -43,7 +43,7 @@ class StreamLogWriterIntegrationTest {
         logWriter.info("User {} logged in at port {}", "admin", 8080);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("User admin logged in at port 8080"));
     }
 
@@ -56,7 +56,7 @@ class StreamLogWriterIntegrationTest {
         logWriter.error("Error occurred");
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("[DEBUG]"));
         assertTrue(output.contains("[INFO]"));
         assertTrue(output.contains("[WARNING]"));
@@ -74,7 +74,7 @@ class StreamLogWriterIntegrationTest {
         logWriter.info("Request processed successfully in {}ms", 45);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("Starting server on port 8080"));
         assertTrue(output.contains("config.properties"));
         assertTrue(output.contains("192.168.1.100"));
@@ -85,12 +85,12 @@ class StreamLogWriterIntegrationTest {
     @Test
     void shouldWriteStackTraceToStream() {
         RuntimeException exception = new RuntimeException("Connection timeout");
-        
+
         logWriter.error("Failed to connect to database");
         logWriter.traceStack(exception);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("Failed to connect to database"));
         assertTrue(output.contains("[STACK TRACE"));
     }
@@ -100,11 +100,11 @@ class StreamLogWriterIntegrationTest {
         Object userId = 12345;
         Object timestamp = System.currentTimeMillis();
         Object status = true;
-        
+
         logWriter.info("Transaction {} completed at {} with success: {}", userId, timestamp, status);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("Transaction 12345"));
         assertTrue(output.contains("true"));
     }
@@ -113,13 +113,13 @@ class StreamLogWriterIntegrationTest {
     void shouldWriteErrorScenarioWithContext() {
         String service = "PaymentService";
         String errorCode = "ERR_500";
-        
+
         logWriter.warning("Service {} is experiencing issues", service);
         logWriter.error("Service {} failed with error code: {}", service, errorCode);
         logWriter.severe("Critical failure in {}", service);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("PaymentService is experiencing issues"));
         assertTrue(output.contains("ERR_500"));
         assertTrue(output.contains("Critical failure in PaymentService"));
@@ -133,11 +133,11 @@ class StreamLogWriterIntegrationTest {
     @Test
     void shouldReportStreamClosedStatusWhenNull() {
         StreamLogWriter nullStreamWriter = new StreamLogWriter(
-            null, 
-            new MessageFormatter(), 
-            new MetadataGenericBuilder(new TimeInformationFormatter())
+                null,
+                new MessageFormatter(),
+                new MetadataGenericBuilder(new TimeInformationFormatter())
         );
-        
+
         assertFalse(nullStreamWriter.isStreamOpen());
     }
 
@@ -145,7 +145,7 @@ class StreamLogWriterIntegrationTest {
     void shouldContinueLoggingAfterIOException() throws IOException {
         OutputStream failingStream = new OutputStream() {
             private int callCount = 0;
-            
+
             @Override
             public void write(int b) throws IOException {
                 callCount++;
@@ -154,13 +154,13 @@ class StreamLogWriterIntegrationTest {
                 }
             }
         };
-        
+
         StreamLogWriter failingWriter = new StreamLogWriter(
-            failingStream,
-            new MessageFormatter(),
-            new MetadataGenericBuilder(new TimeInformationFormatter())
+                failingStream,
+                new MessageFormatter(),
+                new MetadataGenericBuilder(new TimeInformationFormatter())
         );
-        
+
         assertDoesNotThrow(() -> failingWriter.info("First message"));
         assertDoesNotThrow(() -> failingWriter.info("Second message"));
     }
@@ -172,7 +172,7 @@ class StreamLogWriterIntegrationTest {
         }
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("request 1 from user user1"));
         assertTrue(output.contains("request 5 from user user5"));
     }
@@ -181,7 +181,7 @@ class StreamLogWriterIntegrationTest {
     void shouldLogCompleteUserSession() {
         String sessionId = "sess-abc123";
         String username = "john.doe";
-        
+
         logWriter.info("Session {} created for user {}", sessionId, username);
         logWriter.debug("User {} authenticated successfully", username);
         logWriter.info("User {} accessed resource: {}", username, "/api/data");
@@ -189,7 +189,7 @@ class StreamLogWriterIntegrationTest {
         logWriter.info("Session {} ended for user {}", sessionId, username);
 
         String output = outputStream.toString(StandardCharsets.UTF_8);
-        
+
         assertTrue(output.contains("sess-abc123"));
         assertTrue(output.contains("john.doe"));
         assertTrue(output.contains("/api/data"));

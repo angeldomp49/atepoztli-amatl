@@ -4,7 +4,6 @@ import org.makechtec.software.amatl.built_in_writers.commons.MetadataGenericBuil
 import org.makechtec.software.amatl.format.MessageFormatter;
 import org.makechtec.software.amatl.logging.writing.LogWriter;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class FileSystemLogWriter implements LogWriter {
@@ -22,7 +21,7 @@ public class FileSystemLogWriter implements LogWriter {
     @Override
     public void info(String message, Object... args) {
         var fullMessage = metadataBuilder.build("[INFO]") + " " + formatter.formatMessageFromTemplate(message, args);
-        
+
         filesystemOutput.saveMessage(fullMessage);
     }
 
@@ -36,7 +35,7 @@ public class FileSystemLogWriter implements LogWriter {
     @Override
     public void warning(String message, Object... args) {
         var fullMessage = metadataBuilder.build("[WARNING]") + " " + formatter.formatMessageFromTemplate(message, args);
-        
+
         filesystemOutput.saveMessage(fullMessage);
     }
 
@@ -44,14 +43,14 @@ public class FileSystemLogWriter implements LogWriter {
     public void severe(String message, Object... args) {
 
         var fullMessage = metadataBuilder.build("[SEVERE]") + " " + formatter.formatMessageFromTemplate(message, args);
-        
+
         filesystemOutput.saveMessage(fullMessage);
     }
 
     @Override
     public void error(String message, Object... args) {
         var fullMessage = metadataBuilder.build("[ERROR]") + " " + formatter.formatMessageFromTemplate(message, args);
-        
+
         filesystemOutput.saveMessage(fullMessage);
     }
 
@@ -64,6 +63,6 @@ public class FileSystemLogWriter implements LogWriter {
                     filesystemOutput.saveMessage(fullMessage);
                 });
     }
-    
-    
+
+
 }

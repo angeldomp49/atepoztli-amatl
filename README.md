@@ -72,7 +72,6 @@ For gradle kotlin
 
     log.info("hello streaming with {}", "angel");
 
-
 ## Debug ##
 
     ...
